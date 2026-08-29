@@ -1,0 +1,20 @@
+spring:
+  mongodb:
+    host: ${kyc.config.database.mongodb.host}
+    port: ${kyc.config.database.mongodb.port}
+    username: ${kyc.config.database.mongodb.username}
+    password: ${kyc.config.database.mongodb.secret}
+    database: kyc_database
+
+logging:
+  file:
+    name: /opt/kyc/logs/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      file-name-pattern: /opt/kyc/logs/${spring.application.name}/%d{yyyy-MM-dd}.%i.log.gz
+      max-file-size: 50MB
+      max-history: 3
+  level:
+    root: INFO
+    com.kyc: INFO
+    org.springframework: INFO

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: kyc-card-payment-processor
+  profiles:
+    active: dev
+
+kyc-messages:
+  catalog:
+    messages:
+      "001":
+        code: KYC-CARD-PAYMENT-PROCESSOR-001
+        message: Unexpected Error
+        type: ERROR
