@@ -11,3 +11,12 @@ kyc-messages:
         code: KYC-CARD-PAYMENT-PROCESSOR-001
         message: Unexpected Error
         type: ERROR
+        hint: UNEXPECTED
+      "002":
+        code: KYC-CARD-PAYMENT-PROCESSOR-002
+        message: The sent data contains errors
+        type: ERROR
+      "003":
+        code: KYC-CARD-PAYMENT-PROCESSOR-003
+        message: The operation cannot be performed at this moment
+        type: ERROR
