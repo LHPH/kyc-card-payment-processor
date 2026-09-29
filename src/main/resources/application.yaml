@@ -20,3 +20,7 @@ kyc-messages:
         code: KYC-CARD-PAYMENT-PROCESSOR-003
         message: The operation cannot be performed at this moment
         type: ERROR
+      "004":
+        code: KYC-CARD-PAYMENT-PROCESSOR-004
+        message: The operation already was processed
+        type: ERROR

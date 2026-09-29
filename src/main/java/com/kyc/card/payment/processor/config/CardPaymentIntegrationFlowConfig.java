@@ -1,8 +1,15 @@
 package com.kyc.card.payment.processor.config;
 
+import com.kyc.card.payment.processor.enums.CardTypeEnum;
 import com.kyc.card.payment.processor.filters.CardPaymentInputFormatFilter;
 import com.kyc.card.payment.processor.handlers.CardPaymentBadInputFormatHandler;
 import com.kyc.card.payment.processor.handlers.CardPaymentMessageHandler;
+import com.kyc.card.payment.processor.handlers.CreditCardPaymentMessageHandler;
+import com.kyc.card.payment.processor.handlers.DebitCardPaymentMessageHandler;
+import com.kyc.card.payment.processor.handlers.RecordOperationMessageHandler;
+import com.kyc.card.payment.processor.handlers.ValidationDataMessageHandler;
+import com.kyc.card.payment.processor.model.PaymentOperationDTO;
+import com.kyc.card.payment.processor.routers.CardMethodRoute;
 import com.kyc.card.payment.processor.transformers.CardPaymentInputTransformer;
 import com.kyc.core.exception.handlers.KycMessagingExceptionHandler;
 import com.kyc.core.properties.KycMessages;
@@ -29,6 +36,11 @@ public class CardPaymentIntegrationFlowConfig {
             CardPaymentInputTransformer cardPaymentInputTransformer,
             CardPaymentMessageHandler cardPaymentMessageHandler,
             CardPaymentInputFormatFilter cardPaymentInputFormatFilter,
+            ValidationDataMessageHandler validationDataMessageHandler,
+            RecordOperationMessageHandler recordOperationMessageHandler,
+            CardMethodRoute cardMethodRoute,
+            CreditCardPaymentMessageHandler creditCardPaymentMessageHandler,
+            DebitCardPaymentMessageHandler  debitCardPaymentMessageHandler,
             CardPaymentBadInputFormatHandler cardPaymentBadInputFormatHandler
     ) {
         return IntegrationFlow.from(tcpInboundGateway)
@@ -37,6 +49,13 @@ public class CardPaymentIntegrationFlowConfig {
                         df -> df.handle(cardPaymentBadInputFormatHandler)
                 ))
                 .transform(cardPaymentInputTransformer)
+                .handle(validationDataMessageHandler)
+                .handle(recordOperationMessageHandler)
+                .<PaymentOperationDTO, CardTypeEnum>route(cardMethodRoute::resolve,
+                        mapping-> mapping
+                                .subFlowMapping(CardTypeEnum.CC, sf -> sf.handle(creditCardPaymentMessageHandler))
+                                .subFlowMapping(CardTypeEnum.DC, sf -> sf.handle(debitCardPaymentMessageHandler))
+                )
                 .handle(cardPaymentMessageHandler)
                 .get();
     }

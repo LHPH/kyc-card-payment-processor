@@ -6,6 +6,10 @@ spring:
     password: kyc_pass
     database: kyc_database
 
+kyc-config:
+  tcp:
+    port: 9990
+
 logging:
   level:
     root: INFO

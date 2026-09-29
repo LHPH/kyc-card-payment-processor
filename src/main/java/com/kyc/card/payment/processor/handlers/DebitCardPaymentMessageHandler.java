@@ -1,28 +1,20 @@
 package com.kyc.card.payment.processor.handlers;
 
-import com.kyc.card.payment.processor.model.KycCardPaymentInputData;
 import com.kyc.card.payment.processor.model.PaymentOperationDTO;
-import com.kyc.core.exception.KycException;
-import com.kyc.core.properties.KycMessages;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.core.GenericHandler;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class CardPaymentMessageHandler implements GenericHandler<PaymentOperationDTO> {
-
-    @Autowired
-    private KycMessages kycMessages;
+public class DebitCardPaymentMessageHandler implements GenericHandler<PaymentOperationDTO> {
 
     @Override
     public @Nullable Object handle(PaymentOperationDTO payload, MessageHeaders headers) {
 
-        log.info("{}",payload.getKycCardPaymentInputData());
-
-        return "ACK";
+        log.info("Processing DebitCardMessageHandler...");
+        return payload;
     }
 }
