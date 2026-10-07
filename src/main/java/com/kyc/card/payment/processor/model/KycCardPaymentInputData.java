@@ -13,12 +13,9 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class KycCardPaymentInputData {
 
-    private String operation;
-    private String source;
-    private String authorization;
-    private String method;
     private String folio;
     private String account;
+    private String method;
     private String amount;
     private String motive;
     private String office;

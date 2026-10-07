@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-import static com.kyc.card.payment.processor.constants.KycChannelConstants.ERROR_MESSAGE_002;
+import static com.kyc.card.payment.processor.constants.AppConstants.CARD_PAYMENT_LAYOUT_DATE_FORMAT;
+import static com.kyc.card.payment.processor.constants.AppConstants.ERROR_MESSAGE_002;
 
 @Component
 public class ValidationDataMessageHandler implements GenericHandler<KycCardPaymentInputData> {
@@ -26,7 +27,6 @@ public class ValidationDataMessageHandler implements GenericHandler<KycCardPayme
     @Override
     public @Nullable Object handle(KycCardPaymentInputData payload, MessageHeaders headers) {
 
-        String auth = payload.getAuthorization();
         String method = payload.getMethod();
         String card = payload.getAccount();
         String amount = payload.getAmount();
@@ -79,7 +79,7 @@ public class ValidationDataMessageHandler implements GenericHandler<KycCardPayme
 
     private boolean checkDate(String date){
 
-        LocalDateTime localDateTime = DateUtil.stringToLocalDateTime(date,"yyyyMMddHHmmss");
+        LocalDateTime localDateTime = DateUtil.stringToLocalDateTime(date,CARD_PAYMENT_LAYOUT_DATE_FORMAT);
         if(localDateTime!=null){
 
             LocalDateTime now = LocalDateTime.now();

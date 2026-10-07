@@ -24,3 +24,7 @@ kyc-messages:
         code: KYC-CARD-PAYMENT-PROCESSOR-004
         message: The operation already was processed
         type: ERROR
+      "005":
+        code: KYC-CARD-PAYMENT-PROCESSOR-005
+        message: The operation is unprocessable
+        type: ERROR

@@ -1,6 +1,5 @@
 package com.kyc.card.payment.processor.enums;
 
-import com.kyc.card.payment.processor.model.PaymentOperationDTO;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

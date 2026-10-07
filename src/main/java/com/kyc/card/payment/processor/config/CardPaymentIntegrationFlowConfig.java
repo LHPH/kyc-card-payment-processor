@@ -13,6 +13,7 @@ import com.kyc.card.payment.processor.routers.CardMethodRoute;
 import com.kyc.card.payment.processor.transformers.CardPaymentInputTransformer;
 import com.kyc.core.exception.handlers.KycMessagingExceptionHandler;
 import com.kyc.core.properties.KycMessages;
+import com.kyc.core.support.SonyFlakeId;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -29,7 +30,12 @@ import static com.kyc.card.payment.processor.constants.KycChannelConstants.KYC_C
 @Configuration
 public class CardPaymentIntegrationFlowConfig {
 
-    //001P|KYC|AUTH|CC|12345|123456789|2000.00|PAY SERVICE|1|1000|20260912
+    @Bean
+    public SonyFlakeId sonyFlakeId(){
+        return new SonyFlakeId(1L);
+    }
+
+    //12345|123456789|CC|2000.00|PAY SERVICE|1|1000|20260912
     @Bean
     public IntegrationFlow cardPaymentIntegrationFlow(
             TcpInboundGateway tcpInboundGateway,

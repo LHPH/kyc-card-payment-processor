@@ -1,5 +1,6 @@
 package com.kyc.card.payment.processor.entity;
 
+import com.kyc.card.payment.processor.enums.CardTypeEnum;
 import com.kyc.card.payment.processor.enums.PaymentOperationStatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,17 +12,15 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @AllArgsConstructor
 @Document(collection = "card_payments_records")
 public class KycPaymentOperationData {
 
     @Id
-    private Integer id;
-    private String operation;
+    private Long id;
     private PaymentOperationSource source;
-    private String authorization;
-    private String method;
+    private CardTypeEnum method;
     private Long folio;
     private String account;
     private BigDecimal amount;
@@ -30,6 +29,7 @@ public class KycPaymentOperationData {
     private Integer customer;
     private LocalDateTime date;
     private PaymentOperationStatusEnum status;
+    private PaymentOperationError error;
 
     @Getter
     @Builder
@@ -41,5 +41,13 @@ public class KycPaymentOperationData {
         private String ipRemotePort;
         private String ipConnectionId;
         private Long timestamp;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class PaymentOperationError{
+
+        private String message;
     }
 }

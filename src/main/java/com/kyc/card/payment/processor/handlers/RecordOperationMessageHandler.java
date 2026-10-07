@@ -1,17 +1,14 @@
 package com.kyc.card.payment.processor.handlers;
 
 import com.kyc.card.payment.processor.entity.KycPaymentOperationData;
-
-import static com.kyc.card.payment.processor.constants.KycChannelConstants.ERROR_MESSAGE_003;
-import static com.kyc.card.payment.processor.constants.KycChannelConstants.ERROR_MESSAGE_004;
-import static com.kyc.card.payment.processor.entity.KycPaymentOperationData.PaymentOperationSource;
-
+import com.kyc.card.payment.processor.enums.CardTypeEnum;
 import com.kyc.card.payment.processor.enums.PaymentOperationStatusEnum;
 import com.kyc.card.payment.processor.model.KycCardPaymentInputData;
 import com.kyc.card.payment.processor.model.PaymentOperationDTO;
 import com.kyc.card.payment.processor.repository.PaymentOperationRepository;
 import com.kyc.core.exception.KycException;
 import com.kyc.core.properties.KycMessages;
+import com.kyc.core.support.SonyFlakeId;
 import com.kyc.core.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.Nullable;
@@ -24,6 +21,11 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+import static com.kyc.card.payment.processor.constants.AppConstants.CARD_PAYMENT_LAYOUT_DATE_FORMAT;
+import static com.kyc.card.payment.processor.constants.AppConstants.ERROR_MESSAGE_003;
+import static com.kyc.card.payment.processor.constants.AppConstants.ERROR_MESSAGE_004;
+import static com.kyc.card.payment.processor.entity.KycPaymentOperationData.PaymentOperationSource;
+
 @Slf4j
 @Component
 public class RecordOperationMessageHandler implements GenericHandler<KycCardPaymentInputData> {
@@ -34,15 +36,17 @@ public class RecordOperationMessageHandler implements GenericHandler<KycCardPaym
     @Autowired
     private KycMessages kycMessages;
 
+    @Autowired
+    private SonyFlakeId sonyFlakeId;
+
     @Override
     public @Nullable Object handle(KycCardPaymentInputData payload, MessageHeaders headers) {
 
 
         try{
-
-           int id = payload.hashCode();
-           log.info("{}",id);
-           paymentOperationRepository.findById(id)
+           long folio = Long.parseLong(payload.getFolio());
+           log.info("Checking if folio already was not processed");
+           paymentOperationRepository.findByFolioAndStatus(folio,PaymentOperationStatusEnum.SUCCESS)
                    .ifPresent(operation -> {
 
                    throw KycException.builder()
@@ -51,6 +55,9 @@ public class RecordOperationMessageHandler implements GenericHandler<KycCardPaym
                            .outputData(payload)
                            .build();
            });
+
+            long id = sonyFlakeId.nextId();
+            log.info("{}",id);
 
             PaymentOperationSource source = PaymentOperationSource.builder()
                     .ipAddress(String.valueOf(headers.get(IpHeaders.IP_ADDRESS)))
@@ -62,17 +69,15 @@ public class RecordOperationMessageHandler implements GenericHandler<KycCardPaym
 
             KycPaymentOperationData kycPaymentOperationData = KycPaymentOperationData.builder()
                     .id(id)
-                    .operation(payload.getOperation())
                     .source(source)
-                    .authorization(payload.getAuthorization())
-                    .method(payload.getMethod())
-                    .folio(Long.parseLong(payload.getFolio()))
+                    .method(CardTypeEnum.getInstance(payload.getMethod()))
+                    .folio(folio)
                     .account(payload.getAccount())
                     .amount(new BigDecimal(payload.getAmount()))
                     .motive(payload.getMotive())
                     .office(payload.getOffice())
                     .customer(Integer.parseInt(payload.getCustomer()))
-                    .date(DateUtil.stringToLocalDateTime(payload.getDate(),"yyyyMMddHHmmss"))
+                    .date(DateUtil.stringToLocalDateTime(payload.getDate(),CARD_PAYMENT_LAYOUT_DATE_FORMAT))
                     .status(PaymentOperationStatusEnum.REGISTERED)
                     .build();
 
