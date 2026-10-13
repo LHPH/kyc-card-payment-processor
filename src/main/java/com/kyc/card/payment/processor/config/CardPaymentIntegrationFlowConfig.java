@@ -35,7 +35,7 @@ public class CardPaymentIntegrationFlowConfig {
         return new SonyFlakeId(1L);
     }
 
-    //12345|123456789|CC|2000.00|PAY SERVICE|1|1000|20260912
+    //1234567|1234567890123456|CC|2000.00|PAY SERVICE|1|1000|20261012080600
     @Bean
     public IntegrationFlow cardPaymentIntegrationFlow(
             TcpInboundGateway tcpInboundGateway,

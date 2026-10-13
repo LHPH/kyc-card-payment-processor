@@ -1,33 +1,22 @@
 package com.kyc.card.payment.processor.config;
 
+import com.kyc.card.payment.processor.config.properties.ServerTcpConfigurationProperties;
+import com.kyc.card.payment.processor.listeners.TcpIpFilterListener;
 import com.kyc.core.exception.handlers.KycMessagingExceptionHandler;
 import com.kyc.core.properties.KycMessages;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.channel.DirectChannel;
 import org.springframework.integration.ip.tcp.connection.AbstractServerConnectionFactory;
-import org.springframework.integration.ip.tcp.connection.TcpNetServerConnectionFactory;
+import org.springframework.integration.ip.tcp.connection.TcpConnectionOpenEvent;
 import org.springframework.integration.ip.tcp.inbound.TcpInboundGateway;
-import org.springframework.integration.ip.tcp.serializer.ByteArrayCrLfSerializer;
 
 import static com.kyc.card.payment.processor.constants.KycChannelConstants.KYC_CARD_PAYMENT_ERROR_CHANNEL;
 import static com.kyc.card.payment.processor.constants.KycChannelConstants.KYC_CARD_PAYMENT_REQUEST_CHANNEL;
 
 @Configuration
-public class TcpServerConfig {
-
-    @Bean
-    public AbstractServerConnectionFactory abstractServerConnectionFactory(
-            @Value("${kyc-config.tcp.port}") Integer port
-    ){
-
-        TcpNetServerConnectionFactory factory = new TcpNetServerConnectionFactory(port);
-        factory.setSingleUse(false);
-        factory.setSerializer(new ByteArrayCrLfSerializer());
-        factory.setDeserializer(new ByteArrayCrLfSerializer());
-        return factory;
-    }
+public class TcpInboundGatewayConfig {
 
     @Bean
     public TcpInboundGateway tcpInboundGateway(AbstractServerConnectionFactory abstractServerConnectionFactory){
