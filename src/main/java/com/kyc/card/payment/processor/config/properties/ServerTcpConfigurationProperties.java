@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +17,7 @@ public class ServerTcpConfigurationProperties {
     private int timeout;
     private int backlog;
     private IpFilterProperties ipFilter = new IpFilterProperties();
+    private boolean clientAuth;
 
 
 }
