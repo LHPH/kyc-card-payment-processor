@@ -1,4 +1,19 @@
 spring:
+  ssl:
+    bundle:
+      jks:
+        kyc-bundle:
+          key:
+            alias: server
+            password: test123
+          truststore:
+            location: classpath:keystore.p12
+            password: test123
+            type: PKCS12
+          keystore:
+            location: classpath:keystore.p12
+            password: test123
+            type: PKCS12
   mongodb:
     username: kyc_user
     host: localhost
@@ -8,11 +23,12 @@ spring:
 
 kyc-config:
   tcp:
-    port: 9990
-    timeout: 15000
+    port: 9200
+    timeout: 60000
     backlog: 50
+    client-auth: false
     ip-filter:
-      enabled: true
+      enabled: false
       allowed-ip:
         - 127.0.0.1
 
@@ -21,3 +37,8 @@ logging:
     root: INFO
     com.kyc: INFO
     org.springframework: INFO
+    org.springframework.integration: INFO
+    org.springframework.integration.channel: DEBUG
+    org.springframework.integration.handler: DEBUG
+    org.springframework.integration.messaging: DEBUG
+    org.springframework.data.mongodb.core: DEBUG

@@ -5,6 +5,31 @@ spring:
     username: ${kyc.config.database.mongodb.username}
     password: ${kyc.config.database.mongodb.secret}
     database: kyc_database
+  ssl:
+    bundle:
+      jks:
+        kyc-bundle:
+          key:
+            alias: ${kyc.config.card-payment-processor.keystore.alias}
+            password: ${kyc.config.card-payment-processor.keystore.secret}
+          truststore:
+            location: ${kyc.config.card-payment-processor.truststore.path}
+            password: ${kyc.config.card-payment-processor.truststore.secret}
+            type: PKCS12
+          keystore:
+            location: ${kyc.config.card-payment-processor.keystore.path}
+            password: ${kyc.config.card-payment-processor.keystore.secret}
+            type: PKCS12
+
+kyc-config:
+  tcp:
+    port: 9200
+    timeout: 15000
+    backlog: 50
+    client-auth: true
+    ip-filter:
+      enabled: true
+      allowed-ip: ${kyc.config.whitelist.card-payment-processor}
 
 logging:
   file:
@@ -18,3 +43,8 @@ logging:
     root: INFO
     com.kyc: INFO
     org.springframework: INFO
+    org.springframework.integration: INFO
+    org.springframework.integration.channel: INFO
+    org.springframework.integration.handler: INFO
+    org.springframework.integration.messaging: INFO
+    org.springframework.data.mongodb.core: INFO
