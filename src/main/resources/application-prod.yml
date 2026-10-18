@@ -10,15 +10,15 @@ spring:
       jks:
         kyc-bundle:
           key:
-            alias: ${kyc.config.card-payment-processor.keystore.alias}
-            password: ${kyc.config.card-payment-processor.keystore.secret}
+            alias: ${kyc.config.keystore.card-payment-processor.alias}
+            password: ${kyc.config.keystore.card-payment-processor.secret}
           truststore:
-            location: ${kyc.config.card-payment-processor.keystore.path}
-            password: ${kyc.config.card-payment-processor.keystore.secret}
+            location: ${kyc.config.keystore.card-payment-processor.path}
+            password: ${kyc.config.keystore.card-payment-processor.secret}
             type: PKCS12
           keystore:
-            location: ${kyc.config.card-payment-processor.keystore.path}
-            password: ${kyc.config.card-payment-processor.keystore.secret}
+            location: ${kyc.config.keystore.card-payment-processor.path}
+            password: ${kyc.config.keystore.card-payment-processor.secret}
             type: PKCS12
 
 kyc-config:
